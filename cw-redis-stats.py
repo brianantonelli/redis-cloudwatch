@@ -76,10 +76,6 @@ if __name__ == '__main__':
         'CurrItems': redis_data['db0']['keys']
     }
 
-    byte_metrics = {
-        'BytesUsedForCache': redis_data['used_memory'],
-    }
-
     for command_group, commands in command_groups.items():
         count_metrics[command_group] = 0
         for command in commands:
@@ -87,6 +83,9 @@ if __name__ == '__main__':
             if key in redis_data:
                 count_metrics[command_group] += redis_data[key]['calls']
 
-    print count_metrics
+    byte_metrics = {
+        'BytesUsedForCache': redis_data['used_memory'],
+    }
+
     send_multi_metrics(instance_id, region, count_metrics)
     send_multi_metrics(instance_id, region, byte_metrics, 'Bytes')
