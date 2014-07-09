@@ -10,6 +10,45 @@ import redis
 from boto.ec2 import cloudwatch
 from boto.utils import get_instance_metadata
 
+command_groups = {
+    'GetTypeCmds': ['get','getbit','getrange','getset','mget','hget','hgetall','hmget'],
+    'SetTypeCmds': ['set','setbit','setex','setnx','setrange','mset','msetnx','psetnx',
+                    'hmset','hset','hsetnx','lset'],
+    'KeyBasedCmds': ['zdel','dump','exists','expire','expireat','keys','move','persist',
+                     'pexpire','pexpireat','pttl','rename','renamenx','restore','ttl',
+                     'type','append','bitcount','bitop','bitpos','decr','decrby','get',
+                     'getbit','getrange','getset','incr','incrby','incrbyfloat','mget',
+                     'mset','msetnx','psetnx','set','setbit','setex','setnx','setrange',
+                     'strlen','hdel','hexists','hget','hgetall','hincrby','hincrbyfloat',
+                     'hkeys','hlen','hmget','hmset','hset','hsetnx','hvals','blpop',
+                     'brpop','lindex','linsert','llen','lpop','lpush','lpushx','lrange',
+                     'lrem','lset','ltrim','rpop','rpush','rpushx','sadd','scard','sdiff',
+                     'sdiffstore','sinter','sinterstore','sismember','smembers','spop',
+                     'srandmember','srem','sunion','sunionstore', 'sscan','zadd','zcard',
+                     'zcount','zincrby','zinterstore','zlexcount','zrange','zrangebylex',
+                     'zrangebyscore','zrank','zrem','zremrangebylex','zremrangebyrank',
+                     'zremrangebyscore','zrevrange','zrevrangebyscore','zrevrank','zscore',
+                     'zunionstore','zscan','pfadd','pfcount','pfmerge','watch','eval',
+                     'evalsha'],
+    'StringBasedCmds': ['append','bitcount','bitop','bitpos','decr','decrby','get','getbit',
+                        'getrange','getset','incr','incrby','incrbyfloat','mget','mset',
+                        'msetnx','psetnx','set','setbit','setex','setnx','setrange','strlen'],
+    'HashBasedCmds': ['hdel','hexists','hget','hgetall','hincrby','hincrbyfloat','hkeys',
+                      'hlen','hmget','hmset','hset','hsetnx','hvals','hscan'],
+    'ListBasedCmds': ['blpop','brpop','brpoplpush','lindex','linsert','llen','lpop','lpush',
+                      'lpushx','lrange','lrem','lset','ltrim','rpop','rpoplpush','rpush',
+                      'rpushx'],
+    'SetBasedCmds': ['sadd','scard','sdiff','sdiffstore','sinter','sinterstore','sismember',
+                     'smembers','smove','spop','srandmember','srem','sunion','sunionstore',
+                     'sscan'],
+    'SortedSetBasedCmds': ['zadd','zcard','zcount','zincrby','zinterstore','zlexcount',
+                           'zrange','zrangebylex','zrangebyscore','zrank','zrem',
+                           'zremrangebylex','zremrangebyrank','zremrangebyscore','zrevrange',
+                           'zrevrangebyscore','zrevrank','zscore','zunionstore','zscan'],
+    'HyperLogLogBasedCmds': ['pfadd','pfcount','pfmerge'],
+    'ScriptBasedCmds': ['eval','evalsha']
+}
+
 def collect_redis_info():
     r = redis.StrictRedis('localhost', port=6379, db=0)
     info = r.info()
@@ -41,7 +80,13 @@ if __name__ == '__main__':
         'BytesUsedForCache': redis_data['used_memory'],
     }
 
-    # TODO: agg'd command metrics (http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/CacheMetrics.Redis.html)
+    for command_group, commands in command_groups.items():
+        count_metrics[command_group] = 0
+        for command in commands:
+            key = 'cmdstat_' + command
+            if key in redis_data:
+                count_metrics[command_group] += redis_data[key]['calls']
 
+    print count_metrics
     send_multi_metrics(instance_id, region, count_metrics)
     send_multi_metrics(instance_id, region, byte_metrics, 'Bytes')
