@@ -4,8 +4,9 @@ redis-cloudwatch
 ## About
 Provides custom metrics for [Redis](http://redis.io) in AWS CloudWatch similar to those provided by Redis in Elasticache.
 ## Pre-requsites
-This requires that you have installed [Boto](https://github.com/boto/boto) and have created a [Boto configuration file](http://docs.pythonboto.org/en/latest/boto_config_tut.html) with your AWS credentials. You'll want to run this script as a cronjob every minute.
+This requires that you have installed [Redis-Py](https://github.com/andymccurdy/redis-py), [Boto](https://github.com/boto/boto) and have created a [Boto configuration file](http://docs.pythonboto.org/en/latest/boto_config_tut.html) with your AWS credentials. You'll want to run this script as a cronjob every minute.
 ## Install
+    sudo pip install boto redis
     curl https://raw.githubusercontent.com/brianantonelli/redis-cloudwatch/master/cw-redis-stats.py | sudo tee /usr/local/bin/cw-redis-stats.py
     sudo chmod +x /usr/local/bin/cw-redis-stats.py
     (crontab -l ; echo "* * * * * /usr/local/bin/cw-redis-stats.py")| crontab -
@@ -31,7 +32,7 @@ This requires that you have installed [Boto](https://github.com/boto/boto) and h
 |HashBasedCmds | The total number of commands that are hash-based. This is derived from the Redis commandstats statistic by summing all of the commands that act upon one or more hashes. | Count
 |ListBasedCmds | The total number of commands that are list-based. This is derived from the Redis commandstats statistic by summing all of the commands that act upon one or more lists. | Count
 |SetBasedCmds | The total number of commands that are set-based. This is derived from the Redis commandstats statistic by summing all of the commands that act upon one or more sets. | Count
-|SortedSetBasedCmds | The total number of commands that are sorted set-based. This is derived from the Redis commandstats | Count
-|HyperLogLogBasedCmds | The total number of commands that are hyperloglog-based. This is derived from the Redis commandstats | Count 
-|ScriptBasedCmds | The total number of commands that are script-based. This is derived from the Redis commandstats | Count
+|SortedSetBasedCmds | The total number of commands that are sorted set-based. This is derived from the Redis commandstats statistic by summing all of the commands that act upon one or more sorted sets.  | Count
+|HyperLogLogBasedCmds | The total number of commands that are hyperloglog-based. This is derived from the Redis commandstats statistic by summing all of the commands that act upon one or more hyperloglogs. | Count 
+|ScriptBasedCmds | The total number of commands that are script-based. This is derived from the Redis commandstats  statistic by summing all of the commands that act upon one or more scripts (eval, evalsha, etc). | Count
 
