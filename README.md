@@ -4,11 +4,13 @@ redis-cloudwatch
 ## About
 Provides custom metrics for [Redis](http://redis.io) in AWS CloudWatch similar to those provided by Redis in Elasticache.
 ## Pre-requsites
-This requires that you have installed [Boto](https://github.com/boto/boto) and have created a [Boto configuration file](http://docs.pythonboto.org/en/latest/boto_config_tut.html) with your AWS credentials.
+This requires that you have installed [Boto](https://github.com/boto/boto) and have created a [Boto configuration file](http://docs.pythonboto.org/en/latest/boto_config_tut.html) with your AWS credentials. You'll want to run this script as a cronjob every minute.
+## Install
+    curl https://raw.githubusercontent.com/brianantonelli/redis-cloudwatch/master/cw-redis-stats.py | sudo tee /usr/local/bin/cw-redis-stats.py
+    sudo chmod +x /usr/local/bin/cw-redis-stats.py
+    (crontab -l ; echo "* * * * * /usr/local/bin/cw-redis-stats.py")| crontab -
 
-You'll want to run this script as a cronjob every minute:
 
-    (crontab -l ; echo "* * * * * /<path_to_file>/cw-redis-stats.py")| crontab -
 ## Metrics Captured
 | Metric   |  Description | Unit |
 |----------|:-------------|:------|
