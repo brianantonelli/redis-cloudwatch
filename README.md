@@ -3,11 +3,11 @@ redis-cloudwatch
 
 ## About
 Provides custom metrics for [Redis](http://redis.io) in AWS CloudWatch similar to those provided by Redis in Elasticache.
-## Pre-requsites
-This requires that you have installed [Redis-Py](https://github.com/andymccurdy/redis-py), [Boto](https://github.com/boto/boto) and have created a [Boto configuration file](http://docs.pythonboto.org/en/latest/boto_config_tut.html) with your AWS credentials. You'll want to run this script as a cronjob every minute.
+## Prerequsites
+This requires that you have installed [Redis-Py](https://github.com/andymccurdy/redis-py), [Boto](https://github.com/boto/boto) and have created a [Boto configuration file](http://docs.pythonboto.org/en/latest/boto_config_tut.html) with your AWS credentials (~/.boto). You'll want to run this script as a cronjob every minute.
 ## Install
     sudo pip install boto redis
-    curl https://raw.githubusercontent.com/brianantonelli/redis-cloudwatch/master/cw-redis-stats.py | sudo tee /usr/local/bin/cw-redis-stats.py
+    curl https://raw.githubusercontent.com/e271828-/redis-cloudwatch/master/cw-redis-stats.py | sudo tee /usr/local/bin/cw-redis-stats.py
     sudo chmod +x /usr/local/bin/cw-redis-stats.py
     (crontab -l ; echo "* * * * * /usr/local/bin/cw-redis-stats.py")| crontab -
 
@@ -22,7 +22,15 @@ This requires that you have installed [Redis-Py](https://github.com/andymccurdy/
 |CacheHits | The number of successful key lookups. | Count
 |CacheMisses | The number of unsuccessful key lookups. | Count
 |CurrItems | The number of items in the cache. This is derived from the Redis keyspace statistic, summing all of the keys in the entire keyspace. | Count
-##Aggregated Command Metrics Captured
+|UsedMemory | The memory in bytes used by the server. | Count
+|IOPS | The number of instantaneous ops per sec. | Count
+|InputKbps | The number of instantaneous input kbps. | Count
+|OutputKbps | The number of instantaneous output kbps. | Count
+
+
+
+
+## Aggregated Command Metrics Captured
 | Metric   |  Description | Unit |
 |----------|:-------------|:------|
 |GetTypeCmds | The total number of get types of commands. This is derived from the Redis commandstats statistic by summing all of the get types of commands (get, mget, hget, etc.) | Count
