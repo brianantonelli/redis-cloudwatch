@@ -73,6 +73,10 @@ if __name__ == '__main__':
         'Reclaimed': redis_data['expired_keys'],
         'CacheHits': redis_data['keyspace_hits'],
         'CacheMisses': redis_data['keyspace_misses'],
+        'UsedMemory': redis_data['used_memory'],
+        'IOPS': redis_data['instantaneous_ops_per_sec'],
+        'InputKbps': redis_data['instantaneous_input_kbps'],
+        'OutputKbps': redis_data['instantaneous_output_kbps'],
         'CurrItems': redis_data['db0']['keys']
     }
 
