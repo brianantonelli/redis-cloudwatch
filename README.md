@@ -27,7 +27,10 @@ This requires that you have installed [Redis-Py](https://github.com/andymccurdy/
 |InputKbps | The number of instantaneous input kbps. | Count
 |OutputKbps | The number of instantaneous output kbps. | Count
 
-##Aggregated Command Metrics Captured
+
+
+
+## Aggregated Command Metrics Captured
 | Metric   |  Description | Unit |
 |----------|:-------------|:------|
 |GetTypeCmds | The total number of get types of commands. This is derived from the Redis commandstats statistic by summing all of the get types of commands (get, mget, hget, etc.) | Count
