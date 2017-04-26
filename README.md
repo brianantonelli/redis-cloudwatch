@@ -7,7 +7,7 @@ Provides custom metrics for [Redis](http://redis.io) in AWS CloudWatch similar t
 This requires that you have installed [Redis-Py](https://github.com/andymccurdy/redis-py), [Boto](https://github.com/boto/boto) and have created a [Boto configuration file](http://docs.pythonboto.org/en/latest/boto_config_tut.html) with your AWS credentials. You'll want to run this script as a cronjob every minute.
 ## Install
     sudo pip install boto redis
-    curl https://raw.githubusercontent.com/brianantonelli/redis-cloudwatch/master/cw-redis-stats.py | sudo tee /usr/local/bin/cw-redis-stats.py
+    curl https://raw.githubusercontent.com/e271828-/redis-cloudwatch/master/cw-redis-stats.py | sudo tee /usr/local/bin/cw-redis-stats.py
     sudo chmod +x /usr/local/bin/cw-redis-stats.py
     (crontab -l ; echo "* * * * * /usr/local/bin/cw-redis-stats.py")| crontab -
 
