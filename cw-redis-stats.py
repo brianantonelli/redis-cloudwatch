@@ -94,3 +94,4 @@ if __name__ == '__main__':
 
     send_multi_metrics(instance_id, region, count_metrics)
     send_multi_metrics(instance_id, region, byte_metrics, 'Bytes')
+	
