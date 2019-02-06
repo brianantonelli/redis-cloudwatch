@@ -2,7 +2,7 @@
 '''
 Send Redis usage metrics to Amazon CloudWatch
 
-This is intended to run on an Amazon EC2 instance and requires a boto config 
+This is intended to run on an Amazon EC2 instance and requires a boto config
 (~/.boto) allowing to write CloudWatch metrics.
 '''
 
@@ -77,8 +77,9 @@ if __name__ == '__main__':
         'IOPS': redis_data['instantaneous_ops_per_sec'],
         'InputKbps': redis_data['instantaneous_input_kbps'],
         'OutputKbps': redis_data['instantaneous_output_kbps'],
-        'CurrItems': redis_data['db0']['keys']
     }
+
+    count_metrics['CurrItems'] = sum([value['keys'] for key, value in redis_data.items() if key.startswith('db')])
 
     for command_group, commands in command_groups.items():
         count_metrics[command_group] = 0
@@ -93,3 +94,4 @@ if __name__ == '__main__':
 
     send_multi_metrics(instance_id, region, count_metrics)
     send_multi_metrics(instance_id, region, byte_metrics, 'Bytes')
+	
